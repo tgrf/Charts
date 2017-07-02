@@ -352,7 +352,69 @@ open class XAxisRenderer: AxisRendererBase
             context.strokePath()
         }
     }
-    
+
+    open override func renderAnternateGridBackground(context: CGContext, color: NSUIColor) {
+        guard
+            let xAxis = self.axis as? XAxis,
+            let viewPortHandler = self.viewPortHandler,
+            let transformer = self.transformer
+            else { return }
+
+        if (!xAxis.isEnabled)
+        {
+            return
+        }
+
+        context.saveGState()
+        defer { context.restoreGState() }
+
+        context.clip(to: self.gridClippingRect)
+        context.setShouldAntialias(xAxis.gridAntialiasEnabled)
+
+        let valueToPixelMatrix = transformer.valueToPixelMatrix
+
+        var startPosition = CGPoint(x: 0.0, y: 0.0)
+        var endPosition = CGPoint(x: 0.0, y: 0.0)
+
+        let entries = xAxis.entries
+
+        for i in stride(from: 1, to: entries.count, by: 2)
+        {
+            startPosition.x = CGFloat(entries[i])
+            startPosition.y = startPosition.x
+            startPosition = startPosition.applying(valueToPixelMatrix)
+
+            endPosition.x = (entries.count > i + 1 ? CGFloat(entries[i + 1]) : CGFloat.infinity)
+            endPosition.y = endPosition.x
+            endPosition = endPosition.applying(valueToPixelMatrix)
+
+            self.drawGridArea(context: context, startPosition: startPosition, endPosition: endPosition, color: color)
+        }
+    }
+
+    open func drawGridArea(context: CGContext, startPosition: CGPoint, endPosition: CGPoint, color: NSUIColor)
+    {
+        guard
+            let viewPortHandler = self.viewPortHandler
+            else { return }
+
+        if startPosition.x >= viewPortHandler.offsetLeft
+            && endPosition.x <= viewPortHandler.chartWidth
+        {
+            let rectangle = CGRect(
+                x: startPosition.x,
+                y: viewPortHandler.contentTop,
+                width: CGFloat(endPosition.x - startPosition.x),
+                height: viewPortHandler.contentBottom
+            )
+            context.setFillColor(color.cgColor)
+            context.setStrokeColor(color.cgColor)
+            context.setLineWidth(1)
+            context.addRect(rectangle)
+            context.drawPath(using: .fillStroke)
+        }
+    }
+
     open override func renderLimitLines(context: CGContext)
     {
         guard

@@ -51,7 +51,13 @@ open class AxisRendererBase: Renderer
     {
         fatalError("renderAxisLine() cannot be called on AxisRendererBase")
     }
-    
+
+    /// Draws alternate grid background rectangles
+    open func renderAnternateGridBackground(context: CGContext, color: NSUIColor)
+    {
+        fatalError("renderAnternateGridBackground() cannot be called on AxisRendererBase")
+    }
+
     /// Draws the LimitLines associated with this axis to the screen.
     open func renderLimitLines(context: CGContext)
     {

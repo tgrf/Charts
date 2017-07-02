@@ -35,12 +35,18 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     
     /// the color for the background of the chart-drawing area (everything behind the grid lines).
     open var gridBackgroundColor = NSUIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
-    
+
+    /// the color for the each second column of the background of the chart-drawing area (everything behind the grid lines).
+    open var gridAlternateBackgroundColor = NSUIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
+
     open var borderColor = NSUIColor.black
     open var borderLineWidth: CGFloat = 1.0
     
     /// flag indicating if the grid background should be drawn or not
     open var drawGridBackgroundEnabled = false
+
+    /// flag indicating if the alternate grid background should be drawn or not
+    open var drawGridAlternateBackgroundEnabled = false
     
     /// When enabled, the borders rectangle will be rendered.
     /// If this is enabled, there is no point drawing the axis-lines of x- and y-axis.
@@ -494,6 +500,11 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         if drawGridBackgroundEnabled || drawBordersEnabled
         {
             context.restoreGState()
+        }
+
+        if drawGridAlternateBackgroundEnabled
+        {
+            _xAxisRenderer?.renderAnternateGridBackground(context: context, color: gridAlternateBackgroundColor)
         }
     }
     
@@ -1621,7 +1632,14 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         return drawGridBackgroundEnabled
     }
-    
+
+    /// **default**: true
+    /// - returns: `true` if drawing the alternate grid background is enabled, `false` ifnot.
+    open var isDrawGridAlternateBackgroundEnabled: Bool
+    {
+        return drawGridAlternateBackgroundEnabled
+    }
+
     /// **default**: false
     /// - returns: `true` if drawing the borders rectangle is enabled, `false` ifnot.
     open var isDrawBordersEnabled: Bool
