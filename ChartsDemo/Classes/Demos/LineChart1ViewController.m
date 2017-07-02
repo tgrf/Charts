@@ -57,6 +57,9 @@
     _chartView.pinchZoomEnabled = YES;
     _chartView.drawGridBackgroundEnabled = NO;
 
+    _chartView.drawGridAlternateBackgroundEnabled = YES;
+    _chartView.gridAlternateBackgroundColor = UIColor.redColor;
+
     // x-axis limit line
     ChartLimitLine *llXAxis = [[ChartLimitLine alloc] initWithLimit:10.0 label:@"Index 10"];
     llXAxis.lineWidth = 4.0;
