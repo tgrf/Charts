@@ -378,7 +378,7 @@ open class XAxisRenderer: AxisRendererBase
 
         let entries = xAxis.entries
 
-        for i in stride(from: 1, to: entries.count, by: 2)
+        for i in stride(from: 0, to: entries.count, by: 2)
         {
             startPosition.x = CGFloat(entries[i])
             startPosition.y = startPosition.x
